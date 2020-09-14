@@ -321,6 +321,9 @@ export default {
 			this.getAllsites();
 		},
 	},
+	mounted() {
+		this.getAllsites();
+	},
 	methods: {
 		...mapMutations(["SET_VIEW", "SET_DETAIL", "SET_VIDEO", "SET_SHARE"]),
 		siteClick(e) {

@@ -1,23 +1,6 @@
 <template>
 	<div id="app" :class="appTheme">
-		<Aside />
-		<div class="zy-body">
-			<Frame />
-			<Film v-show="view === 'Film'" />
-			<Play v-show="view === 'Play'" />
-			<Star v-show="view === 'Star'" />
-			<History v-show="view === 'History'" />
-			<Setting v-show="view === 'Setting'" />
-		</div>
-		<transition name="slide">
-			<Detail v-if="detail.show" />
-		</transition>
-		<transition name="slide">
-			<Share v-if="share.show" />
-		</transition>
-		<transition name="slide">
-			<EditSites v-if="editSites.show" />
-		</transition>
+		<router-view></router-view>
 	</div>
 </template>
 

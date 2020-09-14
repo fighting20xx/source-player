@@ -3,11 +3,7 @@
 		<Aside />
 		<div class="zy-body">
 			<Frame />
-			<Film v-show="view === 'Film'" />
-			<Play v-show="view === 'Play'" />
-			<Star v-show="view === 'Star'" />
-			<History v-show="view === 'History'" />
-			<Setting v-show="view === 'Setting'" />
+			<router-view></router-view>
 		</div>
 		<transition name="slide">
 			<Detail v-if="detail.show" />
@@ -22,8 +18,11 @@
 </template>
 
 <script>
+import EditSites from "./components/EditSites.vue";
+import Aside from "./components/Aside.vue";
+import Frame from "./components/Frame.vue";
 export default {
-	name: "App",
+	components: { EditSites, Aside, Frame },
 	data() {
 		return {
 			appTheme: "theme-light",
@@ -63,7 +62,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "./assets/scss/theme.scss";
+@import "~@/assets/scss/theme.scss";
 html,
 body,
 #app {

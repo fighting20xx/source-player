@@ -1,7 +1,7 @@
 <template>
 	<div class="aside">
 		<span
-			:class="[view === 'Film' ? 'active ' : ''] + 'zy-svg'"
+			:class="[$route.name === 'Film' ? 'active ' : ''] + 'zy-svg'"
 			@click="changeView('Film')"
 		>
 			<svg
@@ -27,7 +27,7 @@
 			</svg>
 		</span>
 		<span
-			:class="[view === 'Play' ? 'active ' : ''] + 'zy-svg'"
+			:class="[$route.name === 'Play' ? 'active ' : ''] + 'zy-svg'"
 			@click="changeView('Play')"
 		>
 			<svg
@@ -43,7 +43,7 @@
 			</svg>
 		</span>
 		<span
-			:class="[view === 'Star' ? 'active ' : ''] + 'zy-svg'"
+			:class="[$route.name === 'Star' ? 'active ' : ''] + 'zy-svg'"
 			@click="changeView('Star')"
 		>
 			<svg
@@ -61,7 +61,7 @@
 			</svg>
 		</span>
 		<span
-			:class="[view === 'History' ? 'active ' : ''] + 'zy-svg'"
+			:class="[$route.name === 'History' ? 'active ' : ''] + 'zy-svg'"
 			@click="changeView('History')"
 		>
 			<svg
@@ -78,7 +78,7 @@
 			</svg>
 		</span>
 		<span
-			:class="[view === 'Setting' ? 'active ' : ''] + 'zy-svg'"
+			:class="[$route.name === 'Setting' ? 'active ' : ''] + 'zy-svg'"
 			@click="changeView('Setting')"
 		>
 			<svg
@@ -139,6 +139,7 @@ export default {
 			this.editSites = {
 				show: false,
 			};
+			this.$router.push({ name: e });
 		},
 	},
 };
