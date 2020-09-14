@@ -1,4 +1,4 @@
-import db from './dexie';
+import db from '../index';
 const { search } = db;
 export default {
 	async add(doc) {

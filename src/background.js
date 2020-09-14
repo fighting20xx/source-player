@@ -1,6 +1,6 @@
 'use strict';
 
-import './lib/site/server';
+import './server/server.js';
 import {
 	app,
 	protocol,
@@ -135,7 +135,7 @@ if (!gotTheLock) {
 
 if (isDevelopment) {
 	if (process.platform === 'win32') {
-		process.on('message', data => {
+		process.on('message', (data) => {
 			if (data === 'graceful-exit') {
 				app.quit();
 			}

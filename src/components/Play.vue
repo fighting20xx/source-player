@@ -318,8 +318,14 @@
 </template>
 <script>
 import { mapMutations } from "vuex";
-import { star, history, setting, shortcut, mini } from "../lib/dexie";
-import zy from "../lib/site/tools";
+import {
+	star,
+	history,
+	setting,
+	shortcut,
+	mini,
+} from "@/database/services/index.js";
+import api from "@/api/api.js";
 import Player from "xgplayer";
 import Hls from "xgplayer-hls.js";
 import mt from "mousetrap";
@@ -342,7 +348,7 @@ const addPlayerBtn = function (event, svg, attrs) {
 		);
 		controlEl.appendChild(btn);
 		const ev = ["click", "touchend"];
-		ev.forEach(item => {
+		ev.forEach((item) => {
 			btn.addEventListener(
 				item,
 				function (e) {
@@ -366,7 +372,7 @@ const addPlayerView = function (event, tpl, attrs) {
 		const view = util.createDom(viewName, tpl, attrs || {}, viewName);
 		rootEl.appendChild(view);
 		const ev = ["click", "touchend"];
-		ev.forEach(item => {
+		ev.forEach((item) => {
 			view.addEventListener(
 				item,
 				function (e) {
@@ -522,7 +528,7 @@ export default {
 
 			history
 				.find({ site: this.video.key, ids: this.video.info.id })
-				.then(res => {
+				.then((res) => {
 					if (res) {
 						if (res.index === index) {
 							time = res.time;
@@ -532,7 +538,7 @@ export default {
 				});
 		},
 		playVideo(index = 0, time = 0) {
-			this.fetchM3u8List().then(m3u8Arr => {
+			this.fetchM3u8List().then((m3u8Arr) => {
 				this.xg.src = m3u8Arr[index];
 				this.showNext = m3u8Arr.length > 1;
 
@@ -563,7 +569,7 @@ export default {
 					resolve(VIDEO_DETAIL_CACHE[cacheKey].list);
 					return;
 				}
-				zy.detail(this.video.key, this.video.info.id).then(res => {
+				api.detail(this.video.key, this.video.info.id).then((res) => {
 					this.name = res.name;
 					const dd = res.dl.dd;
 					const type = Object.prototype.toString.call(dd);
@@ -608,7 +614,7 @@ export default {
 			this.changeVideo();
 			history
 				.find({ site: this.video.key, ids: this.video.info.id })
-				.then(res => {
+				.then((res) => {
 					if (res) {
 						const doc = {
 							site: res.site,
@@ -645,7 +651,7 @@ export default {
 			this.timer = setInterval(() => {
 				history
 					.find({ site: this.video.key, ids: this.video.info.id })
-					.then(res => {
+					.then((res) => {
 						if (res) {
 							const doc = { ...res };
 							doc.time = this.xg.currentTime;
@@ -691,14 +697,14 @@ export default {
 			this.getAllhistory();
 		},
 		getAllhistory() {
-			history.all().then(res => {
+			history.all().then((res) => {
 				this.right.history = res.reverse();
 			});
 		},
 		updateStar() {
 			const info = this.video.info;
 			star.find({ key: this.video.key, ids: info.id })
-				.then(res => {
+				.then((res) => {
 					if (res) {
 						res.index = info.index;
 						star.update(res.id, res);
@@ -711,7 +717,7 @@ export default {
 		starEvent() {
 			const info = this.video.info;
 			star.find({ key: this.video.key, ids: info.id })
-				.then(res => {
+				.then((res) => {
 					const doc = {
 						key: this.video.key,
 						ids: info.id,
@@ -725,7 +731,7 @@ export default {
 					if (res) {
 						star.update(res.id, doc);
 					} else {
-						star.add(doc).then(starRes => {
+						star.add(doc).then((starRes) => {
 							this.$message.success("收藏成功");
 							this.isStar = true;
 						});
@@ -746,7 +752,7 @@ export default {
 			if (this.xg) {
 				this.xg.pause();
 			}
-			mini.find().then(res => {
+			mini.find().then((res) => {
 				const doc = {
 					id: 0,
 					site: this.video.key,
@@ -790,7 +796,7 @@ export default {
 			this.$message.success("视频信息复制成功");
 		},
 		playWithExternalPalyerEvent() {
-			this.fetchM3u8List().then(m3u8Arr => {
+			this.fetchM3u8List().then((m3u8Arr) => {
 				const fs = require("fs");
 				var externalPlayer = this.setting.externalPlayer;
 				if (!externalPlayer) {
@@ -836,7 +842,7 @@ export default {
 		},
 		checkStar() {
 			star.find({ key: this.video.key, ids: this.video.info.id }).then(
-				res => {
+				(res) => {
 					if (res) {
 						this.isStar = true;
 					} else {
@@ -895,7 +901,7 @@ export default {
 			window.URL.revokeObjectURL(href);
 		},
 		clearAllHistory() {
-			history.clear().then(res => {
+			history.clear().then((res) => {
 				this.right.history = [];
 			});
 		},
@@ -923,18 +929,18 @@ export default {
 		removeHistoryItem(e) {
 			history
 				.remove(e.id)
-				.then(res => {
+				.then((res) => {
 					this.$message.success("删除历史记录成功~");
 					this.getAllhistory();
 				})
-				.catch(err => {
+				.catch((err) => {
 					this.$message.warning("删除历史记录失败, 错误信息: " + err);
 				});
 		},
 		mtEvent() {
-			setting.find().then(res => {
+			setting.find().then((res) => {
 				if (res.shortcut) {
-					shortcut.all().then(res => {
+					shortcut.all().then((res) => {
 						for (const i of res) {
 							mt.bind(i.key, () => {
 								if (this.view === "Play") {
@@ -944,7 +950,7 @@ export default {
 						}
 					});
 				} else {
-					shortcut.all().then(res => {
+					shortcut.all().then((res) => {
 						for (const i of res) {
 							mt.unbind(i.key);
 						}
@@ -1203,7 +1209,7 @@ export default {
 
 			const ev = ["click", "touchend", "mousemove"];
 			let timerID;
-			ev.forEach(item => {
+			ev.forEach((item) => {
 				this.xg.root.addEventListener(item, () => {
 					if (!this.xg.fullscreen) {
 						return;
@@ -1285,7 +1291,7 @@ export default {
 		ipcRenderer.on("miniClosed", () => {
 			history
 				.find({ site: this.video.key, ids: this.video.info.id })
-				.then(res => {
+				.then((res) => {
 					if (res) {
 						if (this.video.info.index !== res.index) {
 							this.video.info.index = res.index;

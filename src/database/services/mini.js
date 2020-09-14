@@ -1,4 +1,4 @@
-import db from './dexie';
+import db from '../index';
 const { mini } = db;
 export default {
 	async add(doc) {

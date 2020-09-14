@@ -232,8 +232,8 @@
 </template>
 <script>
 import { mapMutations } from "vuex";
-import { star, history, search, sites } from "../lib/dexie";
-import zy from "../lib/site/tools";
+import { star, history, search, sites } from "@/database/services/index.js";
+import api from "@/api/api.js";
 import Waterfall from "vue-waterfall-plugin";
 import InfiniteLoading from "vue-infinite-loading";
 const { clipboard } = require("electron");
@@ -333,7 +333,7 @@ export default {
 			} else {
 				this.classList = [];
 				this.type = {};
-				this.getClass().then(res => {
+				this.getClass().then((res) => {
 					if (res) {
 						this.show.class = true;
 						this.infiniteId += 1;
@@ -345,7 +345,7 @@ export default {
 			this.show.classList = false;
 			this.list = [];
 			this.type = e;
-			this.getPage().then(res => {
+			this.getPage().then((res) => {
 				if (res) {
 					this.infiniteId += 1;
 				}
@@ -354,8 +354,8 @@ export default {
 		getClass() {
 			return new Promise((resolve, reject) => {
 				const key = this.site.key;
-				zy.class(key)
-					.then(res => {
+				api.class(key)
+					.then((res) => {
 						var allClass = [{ name: "最新", tid: 0 }].concat(
 							res.class
 						);
@@ -365,7 +365,7 @@ export default {
 						this.type = this.classList[0];
 						resolve(true);
 					})
-					.catch(err => {
+					.catch((err) => {
 						reject(err);
 					});
 			});
@@ -374,13 +374,13 @@ export default {
 			return new Promise((resolve, reject) => {
 				const key = this.site.key;
 				const type = this.type.tid;
-				zy.page(key, type)
-					.then(res => {
+				api.page(key, type)
+					.then((res) => {
 						this.pagecount = res.pagecount;
 						this.show.body = true;
 						resolve(true);
 					})
-					.catch(err => {
+					.catch((err) => {
 						reject(err);
 					});
 			});
@@ -393,7 +393,7 @@ export default {
 				$state.complete();
 				return false;
 			}
-			zy.list(key, page, type).then(res => {
+			api.list(key, page, type).then((res) => {
 				if (res) {
 					this.pagecount -= 1;
 					const type = Object.prototype.toString.call(res);
@@ -401,7 +401,7 @@ export default {
 						$state.complete();
 					}
 					if (type === "[object Array]") {
-						// zy.list 返回的是按时间从旧到新排列, 我门需要翻转为从新到旧
+						// api.list 返回的是按时间从旧到新排列, 我门需要翻转为从新到旧
 						this.list.push(...res.reverse());
 					}
 					if (type === "[object Object]") {
@@ -422,7 +422,7 @@ export default {
 			};
 		},
 		playEvent(site, e) {
-			history.find({ site: site.key, ids: e.id }).then(res => {
+			history.find({ site: site.key, ids: e.id }).then((res) => {
 				if (res) {
 					this.video = {
 						key: res.site,
@@ -444,7 +444,7 @@ export default {
 		},
 		starEvent(site, e) {
 			star.find({ key: site.key, ids: e.id })
-				.then(res => {
+				.then((res) => {
 					if (res) {
 						this.$message.info("已存在");
 					} else {
@@ -457,7 +457,7 @@ export default {
 							last: e.last,
 							note: e.note,
 						};
-						star.add(docs).then(res => {
+						star.add(docs).then((res) => {
 							this.$message.success("收藏成功");
 						});
 					}
@@ -474,7 +474,7 @@ export default {
 			};
 		},
 		downloadEvent(site, e) {
-			zy.download(site.key, e.id).then(res => {
+			api.download(site.key, e.id).then((res) => {
 				if (res && res.length > 0 && res.dl && res.dl.dd) {
 					const text = res.dl.dd._t;
 					if (text) {
@@ -529,7 +529,7 @@ export default {
 			}
 		},
 		getAllSearch() {
-			search.all().then(res => {
+			search.all().then((res) => {
 				this.searchList = res.reverse();
 			});
 		},
@@ -540,17 +540,17 @@ export default {
 			this.show.search = false;
 			this.show.find = true;
 			if (wd) {
-				search.find({ keywords: wd }).then(res => {
+				search.find({ keywords: wd }).then((res) => {
 					if (!res) {
 						search.add({ keywords: wd });
 					}
 					this.getAllSearch();
 				});
-				sites.forEach(site =>
-					zy.search(site.key, wd).then(res => {
+				sites.forEach((site) =>
+					api.search(site.key, wd).then((res) => {
 						const type = Object.prototype.toString.call(res);
 						if (type === "[object Array]") {
-							res.forEach(element => {
+							res.forEach((element) => {
 								element.site = site;
 								this.searchContents.push(element);
 							});
@@ -563,7 +563,7 @@ export default {
 				);
 			} else {
 				this.show.find = false;
-				this.getClass().then(res => {
+				this.getClass().then((res) => {
 					if (res) {
 						this.infiniteId += 1;
 					}
@@ -583,7 +583,7 @@ export default {
 			this.searchAllSitesEvent(sites, wd);
 		},
 		clearSearch() {
-			search.clear().then(res => {
+			search.clear().then((res) => {
 				this.getAllSearch();
 			});
 		},
@@ -601,7 +601,7 @@ export default {
 		},
 		getAllsites(nv) {
 			if (nv) {
-				sites.all().then(res => {
+				sites.all().then((res) => {
 					this.sites = res;
 					for (const i of res) {
 						if (i.key === nv) {
@@ -612,7 +612,7 @@ export default {
 					}
 				});
 			} else {
-				sites.all().then(res => {
+				sites.all().then((res) => {
 					this.sites = res;
 					this.site = this.sites[0];
 					this.siteClick(this.site);

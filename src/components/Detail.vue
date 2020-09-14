@@ -82,8 +82,8 @@
 </template>
 <script>
 import { mapMutations } from "vuex";
-import zy from "../lib/site/tools";
-import { star, history } from "../lib/dexie";
+import api from "@/api/api.js";
+import { star, history } from "@/database/services/index.js";
 const { clipboard } = require("electron");
 export default {
 	name: "detail",
@@ -155,7 +155,7 @@ export default {
 		playEvent(n) {
 			history
 				.find({ site: this.detail.key, ids: this.detail.info.id })
-				.then(res => {
+				.then((res) => {
 					if (res) {
 						this.video = {
 							key: res.site,
@@ -184,7 +184,7 @@ export default {
 		},
 		starEvent() {
 			star.find({ key: this.detail.key, ids: this.info.id })
-				.then(res => {
+				.then((res) => {
 					if (res) {
 						this.$message.info("该影片已被收藏");
 					} else {
@@ -197,7 +197,7 @@ export default {
 							last: this.info.last,
 							note: this.info.note,
 						};
-						star.add(docs).then(res => {
+						star.add(docs).then((res) => {
 							this.$message.success("收藏成功");
 						});
 					}
@@ -207,7 +207,7 @@ export default {
 				});
 		},
 		downloadEvent() {
-			zy.download(this.detail.key, this.info.id).then(res => {
+			api.download(this.detail.key, this.info.id).then((res) => {
 				if (res && res.dl && res.dl.dd) {
 					const text = res.dl.dd._t;
 					if (text) {
@@ -253,7 +253,7 @@ export default {
 			// 豆瓣搜索链接
 			var doubanSearchLink = "https://www.douban.com/search?q=" + name;
 			var link = doubanSearchLink;
-			axios.get(doubanSearchLink).then(res => {
+			axios.get(doubanSearchLink).then((res) => {
 				const $ = cheerio.load(res.data);
 				// 比较第一和第二豆瓣搜索结果, 如果名字相符， 就打开该链接，否则打开搜索页面
 				var nameInDouban = $($("div.result")[0])
@@ -284,7 +284,7 @@ export default {
 			const name = this.detail.info.name.trim();
 			// 豆瓣搜索链接
 			var doubanSearchLink = "https://www.douban.com/search?q=" + name;
-			axios.get(doubanSearchLink).then(res => {
+			axios.get(doubanSearchLink).then((res) => {
 				const $ = cheerio.load(res.data);
 				// 比较第一和第二给豆瓣搜索结果, 看名字是否相符
 				var link = "";
@@ -309,7 +309,7 @@ export default {
 				}
 				// 如果找到链接，就打开该链接获取评分
 				if (link) {
-					axios.get(link).then(response => {
+					axios.get(link).then((response) => {
 						const parsedHtml = cheerio.load(response.data);
 						var rating = parsedHtml("body")
 							.find("#interest_sectl")
@@ -329,7 +329,7 @@ export default {
 		},
 		getDetailInfo() {
 			const id = this.detail.info.ids || this.detail.info.id;
-			zy.detail(this.detail.key, id).then(res => {
+			api.detail(this.detail.key, id).then((res) => {
 				if (res) {
 					this.info = res;
 					this.$set(this.info, "rate", "");

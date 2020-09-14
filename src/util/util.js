@@ -412,7 +412,7 @@ const global = this || {};
 			var _this = this;
 			var _url = sUrl;
 
-			asParamNames.forEach(sParam => {
+			asParamNames.forEach((sParam) => {
 				_url = _this.removeParam(sParam, _url);
 			});
 
@@ -1454,11 +1454,11 @@ const global = this || {};
 		},
 		// 数组求交集
 		intersect(a, b) {
-			return [...new Set([...a].filter(x => b.includes(x)))];
+			return [...new Set([...a].filter((x) => b.includes(x)))];
 		},
 		// 数组求差集
 		difference(a, b) {
-			return [...new Set([...a].filter(x => !b.includes(x)))];
+			return [...new Set([...a].filter((x) => !b.includes(x)))];
 		},
 		// 数组内部交换
 		internalExchange(n, m, arr) {

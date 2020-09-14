@@ -54,8 +54,8 @@
 </template>
 <script>
 import { mapMutations } from "vuex";
-import { history, sites } from "../lib/dexie";
-import zy from "../lib/site/tools";
+import { history, sites } from "@/database/services/index.js";
+import api from "@/api/api.js";
 const { clipboard } = require("electron");
 export default {
 	name: "history",
@@ -118,7 +118,7 @@ export default {
 			};
 		},
 		playEvent(e) {
-			history.find({ site: e.site, ids: e.ids }).then(res => {
+			history.find({ site: e.site, ids: e.ids }).then((res) => {
 				if (res) {
 					this.video = {
 						key: res.site,
@@ -141,7 +141,7 @@ export default {
 			};
 		},
 		downloadEvent(e) {
-			zy.download(e.site, e.ids).then(res => {
+			api.download(e.site, e.ids).then((res) => {
 				if (res && res.dl && res.dl.dd) {
 					const text = res.dl.dd._t;
 					if (text) {
@@ -160,7 +160,7 @@ export default {
 					}
 				} else {
 					var m3u8List = {};
-					zy.detail(e.site, e.ids).then(res => {
+					api.detail(e.site, e.ids).then((res) => {
 						const dd = res.dl.dd;
 						const type = Object.prototype.toString.call(dd);
 						if (type === "[object Array]") {
@@ -187,22 +187,22 @@ export default {
 			});
 		},
 		clearAllHistory() {
-			history.clear().then(res => {
+			history.clear().then((res) => {
 				this.history = [];
 			});
 		},
 		getAllhistory() {
-			history.all().then(res => {
+			history.all().then((res) => {
 				this.history = res.reverse();
 			});
 		},
 		getAllsites() {
-			sites.all().then(res => {
+			sites.all().then((res) => {
 				this.sites = res;
 			});
 		},
 		getSiteName(key) {
-			var site = this.sites.find(e => e.key === key);
+			var site = this.sites.find((e) => e.key === key);
 			if (site) {
 				return site.name;
 			}
@@ -223,10 +223,10 @@ export default {
 		removeHistoryItem(e) {
 			history
 				.remove(e.id)
-				.then(res => {
+				.then((res) => {
 					this.getAllhistory();
 				})
-				.catch(err => {
+				.catch((err) => {
 					this.$message.warning("删除历史记录失败, 错误信息: " + err);
 				});
 		},

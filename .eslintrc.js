@@ -26,6 +26,7 @@ module.exports = {
 	rules: {
 		'array-callback-return': 1, // return 后面是否允许省略
 		'arrow-parens': [0, 'as-needed'], // 箭头函数的参数可以不使用圆括号
+		'arrow-body-style': 'off', // 箭头函数的写法 2
 		'consistent-return': 0, // 要求 return 语句要么总是指定返回的值，要么不指定
 		camelcase: 0, // 强制驼峰法命名
 		eqeqeq: 2, // 强制全等( === 和 !==)
@@ -61,7 +62,5 @@ module.exports = {
 		'spaced-comment': 1, // 要求在注释前有空白,
 		'no-multiple-empty-lines': [0, { max: 10 }], // ???  不允许多个空行
 		'prettier/prettier': ['error', { endOfLine: 'auto' }], // 不符合 prettier 规则的代码，要进行错误提示（红线）
-		'arrow-parens': 'off',            // 箭头函数的写法 1
-		'arrow-body-style': 'off'         // 箭头函数的写法 2
 	},
 };

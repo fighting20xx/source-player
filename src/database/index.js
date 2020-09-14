@@ -1,5 +1,5 @@
 import Dexie from 'dexie';
-import { setting, sites, localKey } from './initData';
+import { setting, sites, localKey } from './config/initData';
 
 const db = new Dexie('zy');
 

@@ -1,4 +1,4 @@
-import db from './dexie';
+import db from '../index';
 const { sites } = db;
 export default {
 	async all() {

@@ -261,11 +261,12 @@
 <script>
 import { mapMutations } from "vuex";
 import pkg from "../../package.json";
-import { setting, sites, shortcut, star } from "../lib/dexie";
+import { setting, sites, shortcut, star } from "@/database/services/index.js";
 import { shell, clipboard, remote } from "electron";
-import db from "../lib/dexie/dexie";
-import { sites as defaultSites } from "../lib/dexie/initData";
+import db from "@/database/index.js";
+import { sites as defaultSites } from "@/database/config/initData";
 import fs from "fs";
+
 export default {
 	name: "setting",
 	data() {
@@ -317,7 +318,7 @@ export default {
 			shell.openExternal(e);
 		},
 		getSetting() {
-			setting.find().then(res => {
+			setting.find().then((res) => {
 				this.d = {
 					id: res.id,
 					site: res.site,
@@ -332,23 +333,23 @@ export default {
 			});
 		},
 		getSites() {
-			sites.all().then(res => {
+			sites.all().then((res) => {
 				this.sitesList = res;
 			});
 		},
 		getShortcut() {
-			shortcut.all().then(res => {
+			shortcut.all().then((res) => {
 				this.shortcutList = res;
 			});
 		},
 		getFavorites() {
-			star.all().then(res => {
+			star.all().then((res) => {
 				this.favoritesList = res;
 			});
 		},
 		changeView(e) {
 			this.d.view = e;
-			setting.update(this.d).then(res => {
+			setting.update(this.d).then((res) => {
 				this.$message.success("修改成功");
 				this.show.view = false;
 				this.setting = this.d;
@@ -356,7 +357,7 @@ export default {
 		},
 		siteClick(e) {
 			this.d.site = e;
-			setting.update(this.d).then(res => {
+			setting.update(this.d).then((res) => {
 				this.$message.success("修改默认源成功");
 				this.setting = this.d;
 				this.show.site = false;
@@ -364,7 +365,7 @@ export default {
 		},
 		updateSearchOption(e) {
 			this.d.searchAllSites = this.setting.searchAllSites;
-			setting.update(this.d).then(res => {
+			setting.update(this.d).then((res) => {
 				this.setting = this.d;
 			});
 		},
@@ -381,13 +382,13 @@ export default {
 			};
 			remote.dialog
 				.showSaveDialog(options)
-				.then(result => {
+				.then((result) => {
 					if (!result.canceled) {
 						fs.writeFileSync(result.filePath, str);
 						this.$message.success("已保存成功");
 					}
 				})
-				.catch(err => {
+				.catch((err) => {
 					this.$message.error(err);
 				});
 		},
@@ -402,12 +403,12 @@ export default {
 			};
 			remote.dialog
 				.showOpenDialog(options)
-				.then(result => {
+				.then((result) => {
 					if (!result.canceled) {
-						result.filePaths.forEach(file => {
+						result.filePaths.forEach((file) => {
 							var str = fs.readFileSync(file);
 							const json = JSON.parse(str);
-							star.bulkAdd(json).then(e => {
+							star.bulkAdd(json).then((e) => {
 								this.getFavorites();
 							});
 							this.upgradeFavorites();
@@ -415,19 +416,19 @@ export default {
 						this.$message.success("导入收藏成功");
 					}
 				})
-				.catch(err => {
+				.catch((err) => {
 					this.$message.error(err);
 				});
 		},
 		clearFavorites() {
-			star.clear().then(e => {
+			star.clear().then((e) => {
 				this.getFavorites();
 				this.$message.success("清空所有收藏成功");
 			});
 		},
 		upgradeFavorites() {
-			star.all().then(res => {
-				res.forEach(element => {
+			star.all().then((res) => {
+				res.forEach((element) => {
 					const docs = {
 						key: element.key,
 						ids: element.ids,
@@ -438,7 +439,7 @@ export default {
 						note: element.note,
 					};
 					star.find({ key: element.key, ids: element.ids }).then(
-						res => {
+						(res) => {
 							if (!res) {
 								star.add(docs);
 							}
@@ -458,7 +459,7 @@ export default {
 			};
 			remote.dialog
 				.showOpenDialog(options)
-				.then(result => {
+				.then((result) => {
 					if (!result.canceled) {
 						var playerPath = result.filePaths[0].replace(
 							/\\/g,
@@ -469,18 +470,18 @@ export default {
 						);
 						this.d.externalPlayer = playerPath;
 						this.externalPlayer = playerPath;
-						setting.update(this.d).then(res => {
+						setting.update(this.d).then((res) => {
 							this.setting = this.d;
 						});
 					}
 				})
-				.catch(err => {
+				.catch((err) => {
 					this.$message.error(err);
 				});
 		},
 		resetLocalPlayer() {
 			this.d.externalPlayer = "";
-			setting.update(this.d).then(res => {
+			setting.update(this.d).then((res) => {
 				this.setting = this.d;
 				this.$message.success("重置第三方播放器成功");
 			});
@@ -491,7 +492,7 @@ export default {
 			);
 			this.editPlayerPath = false;
 			this.d.externalPlayer = this.externalPlayer;
-			setting.update(this.d).then(res => {
+			setting.update(this.d).then((res) => {
 				this.setting = this.d;
 			});
 		},
@@ -506,15 +507,16 @@ export default {
 					{ name: "All types", extensions: ["*"] },
 				],
 			};
+
 			remote.dialog
 				.showSaveDialog(options)
-				.then(result => {
+				.then((result) => {
 					if (!result.canceled) {
 						fs.writeFileSync(result.filePath, str);
 						this.$message.success("已保存成功");
 					}
 				})
-				.catch(err => {
+				.catch((err) => {
 					this.$message.error(err);
 				});
 		},
@@ -527,23 +529,23 @@ export default {
 				],
 				properties: ["openFile"],
 			};
-			remote.dialog.showOpenDialog(options).then(result => {
+			remote.dialog.showOpenDialog(options).then((result) => {
 				if (!result.canceled) {
 					sites.clear();
 					result.filePaths
-						.forEach(file => {
+						.forEach((file) => {
 							var str = fs.readFileSync(file);
 							const json = JSON.parse(str);
-							sites.bulkAdd(json).then(e => {
+							sites.bulkAdd(json).then((e) => {
 								this.getSites();
 								this.d.site = json[0].key;
-								setting.update(this.d).then(res => {
+								setting.update(this.d).then((res) => {
 									this.setting = this.d;
 								});
 							});
 							this.$message.success("导入成功");
 						})
-						.catch(err => {
+						.catch((err) => {
 							this.$message.error(err);
 						});
 				}
@@ -557,10 +559,10 @@ export default {
 		},
 		resetSites() {
 			sites.clear();
-			sites.bulkAdd(defaultSites).then(e => {
+			sites.bulkAdd(defaultSites).then((e) => {
 				this.getSites();
 				this.d.site = defaultSites[0].key;
-				setting.update(this.d).then(res => {
+				setting.update(this.d).then((res) => {
 					this.setting = this.d;
 					this.$message.success("重置源成功");
 				});
@@ -568,13 +570,13 @@ export default {
 		},
 		changeTheme(e) {
 			this.d.theme = e;
-			setting.update(this.d).then(res => {
+			setting.update(this.d).then((res) => {
 				this.$message.success("修改成功");
 			});
 		},
 		changeShortcut(e) {
 			this.d.shortcut = e;
-			setting.update(this.d).then(res => {
+			setting.update(this.d).then((res) => {
 				this.$message.success("修改成功");
 				this.setting = this.d;
 				this.show.shortcut = false;
@@ -589,16 +591,16 @@ export default {
 		impShortcut() {
 			const str = clipboard.readText();
 			const json = JSON.parse(str);
-			shortcut.clear().then(res => {
+			shortcut.clear().then((res) => {
 				this.$message.info("已清空原数据");
-				shortcut.add(json).then(e => {
+				shortcut.add(json).then((e) => {
 					this.$message.success("已添加成功");
 					this.getSites();
 				});
 			});
 		},
 		clearDBEvent() {
-			db.delete().then(res => {
+			db.delete().then((res) => {
 				this.$message.success("重置成功");
 				const win = remote.getCurrentWindow();
 				win.destroy();

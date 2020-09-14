@@ -82,8 +82,8 @@
 </template>
 <script>
 import { mapMutations } from "vuex";
-import { star, history, sites } from "../lib/dexie";
-import zy from "../lib/site/tools";
+import { star, history, sites } from "@/database/services/index.js";
+import api from "@/api/api.js";
 import draggable from "vuedraggable";
 
 const { clipboard } = require("electron");
@@ -154,7 +154,7 @@ export default {
 			}
 		},
 		playEvent(e) {
-			history.find({ site: e.key, ids: e.ids }).then(res => {
+			history.find({ site: e.key, ids: e.ids }).then((res) => {
 				if (res) {
 					this.video = {
 						key: e.key,
@@ -173,7 +173,7 @@ export default {
 			this.view = "Play";
 		},
 		deleteEvent(e) {
-			star.remove(e.id).then(res => {
+			star.remove(e.id).then((res) => {
 				if (res) {
 					this.$message.warning("删除失败");
 				} else {
@@ -190,17 +190,17 @@ export default {
 			};
 		},
 		clearHasUpdateFlag(e) {
-			star.find({ id: e.id }).then(res => {
+			star.find({ id: e.id }).then((res) => {
 				res.hasUpdate = false;
 				star.update(e.id, res);
 				this.getStarList();
 			});
 		},
 		listUpdatedEvent() {
-			star.clear().then(res1 => {
+			star.clear().then((res1) => {
 				// 重新排序
 				var id = this.list.length;
-				this.list.forEach(element => {
+				this.list.forEach((element) => {
 					element.id = id;
 					star.add(element);
 					id -= 1;
@@ -208,8 +208,8 @@ export default {
 			});
 		},
 		updateEvent(e) {
-			zy.detail(e.key, e.ids)
-				.then(res => {
+			api.detail(e.key, e.ids)
+				.then((res) => {
 					var doc = {
 						key: e.key,
 						id: e.id,
@@ -220,7 +220,7 @@ export default {
 						year: res.year,
 						note: res.note,
 					};
-					star.get(e.id).then(resStar => {
+					star.get(e.id).then((resStar) => {
 						doc.hasUpdate = resStar.hasUpdate;
 						var msg = "";
 						if (e.last === res.last) {
@@ -235,18 +235,18 @@ export default {
 						this.getStarList();
 					});
 				})
-				.catch(err => {
+				.catch((err) => {
 					var msg = `同步"${e.name}"失败, 请重试。`;
 					this.$message.warning(msg, err);
 				});
 		},
 		updateAllEvent(list) {
-			list.forEach(e => {
+			list.forEach((e) => {
 				this.updateEvent(e);
 			});
 		},
 		downloadEvent(e) {
-			zy.download(e.key, e.ids).then(res => {
+			api.download(e.key, e.ids).then((res) => {
 				if (res && res.dl && res.dl.dd) {
 					const text = res.dl.dd._t;
 					if (text) {
@@ -265,7 +265,7 @@ export default {
 					}
 				} else {
 					var m3u8List = {};
-					zy.detail(e.key, e.ids).then(res => {
+					api.detail(e.key, e.ids).then((res) => {
 						const dd = res.dl.dd;
 						const type = Object.prototype.toString.call(dd);
 						if (type === "[object Array]") {
@@ -292,7 +292,7 @@ export default {
 			});
 		},
 		getSiteName(key) {
-			var site = this.sites.find(e => e.key === key);
+			var site = this.sites.find((e) => e.key === key);
 			if (site) {
 				return site.name;
 			}
@@ -305,12 +305,12 @@ export default {
 			}
 		},
 		getStarList() {
-			star.all().then(res => {
+			star.all().then((res) => {
 				this.list = res.reverse();
 			});
 		},
 		getAllsites() {
-			sites.all().then(res => {
+			sites.all().then((res) => {
 				this.sites = res;
 			});
 		},

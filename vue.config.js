@@ -1,7 +1,14 @@
+const path = require('path');
+const resolve = (dir) => {
+	return path.join(__dirname, dir);
+};
 module.exports = {
 	pages: {
 		index: 'src/main.js',
 		mini: 'src/mini/main.js',
+	},
+	chainWebpack: (config) => {
+		config.resolve.alias.set('@', resolve('src')); // key,value自行定义，比如.set('@@', resolve('src/components'))
 	},
 	pluginOptions: {
 		electronBuilder: {
@@ -44,7 +51,7 @@ module.exports = {
 	},
 
 	devServer: {
-		open: true,
+		open: false,
 		host: '127.0.0.1',
 		port: 9099,
 		https: false,

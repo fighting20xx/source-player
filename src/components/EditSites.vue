@@ -117,7 +117,7 @@
 </template>
 <script>
 import { mapMutations } from "vuex";
-import { sites } from "../lib/dexie";
+import { sites } from "@/database/services/index.js";
 import draggable from "vuedraggable";
 export default {
 	name: "editSites",
@@ -160,25 +160,25 @@ export default {
 			this.editSites.show = false;
 		},
 		getSites() {
-			sites.all().then(res => {
+			sites.all().then((res) => {
 				this.sites = res;
 			});
 		},
 		removeEvent(e) {
 			sites
 				.remove(e.id)
-				.then(res => {
+				.then((res) => {
 					this.getSites();
 				})
-				.catch(err => {
+				.catch((err) => {
 					this.$message.warning("删除源失败, 错误信息: " + err);
 				});
 		},
 		listUpdatedEvent() {
-			sites.clear().then(res1 => {
+			sites.clear().then((res1) => {
 				// 重新排序
 				var id = 1;
-				this.sites.forEach(element => {
+				this.sites.forEach((element) => {
 					element.id = id;
 					sites.add(element);
 					id += 1;
@@ -204,7 +204,7 @@ export default {
 				api: this.newSite.api,
 				download: this.newSite.download,
 			};
-			sites.add(doc).then(res => {
+			sites.add(doc).then((res) => {
 				this.newSite = {
 					name: "",
 					api: "",

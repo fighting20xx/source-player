@@ -21,7 +21,7 @@
 import { mapMutations } from "vuex";
 import QrcodeVue from "qrcode.vue";
 import html2canvas from "html2canvas";
-import zy from "../lib/site/tools";
+import api from "@/api/api.js";
 const { clipboard, nativeImage } = require("electron");
 export default {
 	name: "share",
@@ -65,7 +65,7 @@ export default {
 		getDetail() {
 			this.loading = true;
 			const id = this.share.info.ids || this.share.info.id;
-			zy.detail(this.share.key, id).then(res => {
+			api.detail(this.share.key, id).then((res) => {
 				if (res) {
 					this.pic = res.pic;
 					var m3u8List = {};
@@ -93,7 +93,7 @@ export default {
 		picLoadEvent() {
 			const dom = document.getElementById("right");
 			html2canvas(dom, { useCORS: true, allowTaint: true }).then(
-				res => {
+				(res) => {
 					const png = res.toDataURL("image/png");
 					const p = nativeImage.createFromDataURL(png);
 					clipboard.writeImage(p);

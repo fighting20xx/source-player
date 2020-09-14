@@ -1,4 +1,6 @@
 import axios from 'axios';
+import qs from 'qs';
+import AJAX_SOURCE from './ajaxSource';
 
 /**
  * Ajax 全局引用。

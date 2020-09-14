@@ -144,8 +144,8 @@
 	</div>
 </template>
 <script>
-import zy from "../lib/site/tools";
-import { history, setting, shortcut, mini } from "../lib/dexie";
+import api from "@/api/api.js";
+import { history, setting, shortcut, mini } from "@/database/services/index.js";
 import mt from "mousetrap";
 import "xgplayer";
 import Hls from "xgplayer-hls.js";
@@ -208,9 +208,9 @@ export default {
 			return false;
 		},
 		getUrls() {
-			mini.find().then(res => {
+			mini.find().then((res) => {
 				this.video = res;
-				this.fetchM3u8List(res).then(m3u8Arr => {
+				this.fetchM3u8List(res).then((m3u8Arr) => {
 					this.m3u8Arr = m3u8Arr;
 					this.xg.src = m3u8Arr[res.index];
 					if (res.time !== 0 || res.time !== "") {
@@ -244,7 +244,7 @@ export default {
 					resolve(VIDEO_DETAIL_CACHE[cacheKey].list);
 					return;
 				}
-				zy.detail(info.site, info.ids).then(res => {
+				api.detail(info.site, info.ids).then((res) => {
 					this.name = res.name;
 					const dd = res.dl.dd;
 					const type = Object.prototype.toString.call(dd);
@@ -283,7 +283,7 @@ export default {
 		videoPlaying() {
 			history
 				.find({ site: this.video.site, ids: this.video.ids })
-				.then(res => {
+				.then((res) => {
 					if (res) {
 						res.index = this.video.index;
 						history.update(res.id, res);
@@ -308,7 +308,7 @@ export default {
 				this.progress = progress.toFixed(2);
 				history
 					.find({ site: this.video.site, ids: this.video.ids })
-					.then(res => {
+					.then((res) => {
 						if (res) {
 							const v = res;
 							v.time = this.xg.currentTime;
@@ -327,12 +327,12 @@ export default {
 			}
 			history
 				.find({ site: this.video.site, ids: this.video.ids })
-				.then(res => {
+				.then((res) => {
 					const v = res;
 					const id = v.id;
 					v.index--;
 					delete v.id;
-					history.update(id, v).then(e => {
+					history.update(id, v).then((e) => {
 						this.xg.src = this.m3u8Arr[v.index];
 						this.video.index--;
 					});
@@ -345,12 +345,12 @@ export default {
 			}
 			history
 				.find({ site: this.video.site, ids: this.video.ids })
-				.then(res => {
+				.then((res) => {
 					const v = res;
 					v.index++;
 					const id = v.id;
 					delete v.id;
-					history.update(id, v).then(e => {
+					history.update(id, v).then((e) => {
 						this.xg.src = this.m3u8Arr[v.index];
 						this.video.index++;
 					});
@@ -364,9 +364,9 @@ export default {
 			}
 		},
 		mtEvent() {
-			setting.find().then(res => {
+			setting.find().then((res) => {
 				if (res.shortcut) {
-					shortcut.all().then(res => {
+					shortcut.all().then((res) => {
 						for (const i of res) {
 							mt.bind(i.key, () => {
 								this.shortcutEvent(i.name);
