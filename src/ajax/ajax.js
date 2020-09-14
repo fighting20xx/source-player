@@ -1,6 +1,14 @@
 import axios from 'axios';
 import qs from 'qs';
 import AJAX_SOURCE from './ajaxSource';
+import {
+	resolve as ajaxRequestResolveIntercept,
+	reject as ajaxRequestRejectIntercept,
+} from './ajax-request-intercept';
+import {
+	resolve as ajaxResponseResolveIntercept,
+	reject as ajaxResponseRejectIntercept,
+} from './ajax-response-intercept';
 
 /**
  * Ajax 全局引用。
@@ -44,6 +52,20 @@ export const ajax = function (
 				oOptions
 			)
 		);
+
+		// 设置拦截器。
+		if (ajaxRequestResolveIntercept && ajaxRequestRejectIntercept) {
+			oAxios.interceptors.request.use(
+				ajaxRequestResolveIntercept,
+				ajaxRequestRejectIntercept
+			);
+		}
+		if (ajaxResponseResolveIntercept && ajaxResponseRejectIntercept) {
+			oAxios.interceptors.response.use(
+				ajaxResponseResolveIntercept,
+				ajaxResponseRejectIntercept
+			);
+		}
 
 		// 调用 axios 实例对应的方法。
 		return oAxios[sAction].call(

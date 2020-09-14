@@ -9,23 +9,23 @@ const source = {
 	/**
 	 * 域名
 	 */
-	AJAX_ORIGIN: '',
+	AJAX_ORIGIN: 'https://127.0.0.1:9099',
 
 	/**
 	 *eln源
 	 */
-	AJAX_ELN: 'eln',
-	eln: '',
+	AJAX_SELF_SERVER: 'server',
+	server: '',
 
 	/**
 	 * 默认源
 	 */
-	AJAX_DEFAULT: 'eln', // 不填写的情况，默认使用的源
+	AJAX_DEFAULT: 'server', // 不填写的情况，默认使用的源
 };
 
 export function setAjaxBase(base) {
 	source.AJAX_ORIGIN = base;
-	source.eln = base + '/api/v1/';
+	source.server = base + '/api/v1/';
 }
 
 export default source;
