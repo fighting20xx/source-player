@@ -82,7 +82,7 @@
 </template>
 <script>
 import { mapMutations } from "vuex";
-import { star, history, sites } from "@/database/services/index.js";
+import { star, history, sites } from "@/database/dexie/services/index.js";
 import api from "@/api/api.js";
 import draggable from "vuedraggable";
 

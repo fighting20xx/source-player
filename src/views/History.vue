@@ -54,7 +54,7 @@
 </template>
 <script>
 import { mapMutations } from "vuex";
-import { history, sites } from "@/database/services/index.js";
+import { history, sites } from "@/database/dexie/services/index.js";
 import api from "@/api/api.js";
 const { clipboard } = require("electron");
 export default {

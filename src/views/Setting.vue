@@ -261,10 +261,15 @@
 <script>
 import { mapMutations } from "vuex";
 import pkg from "../../package.json";
-import { setting, sites, shortcut, star } from "@/database/services/index.js";
+import {
+	setting,
+	sites,
+	shortcut,
+	star,
+} from "@/database/dexie/services/index.js";
 import { shell, clipboard, remote } from "electron";
-import db from "@/database/index.js";
-import { sites as defaultSites } from "@/database/config/initData";
+import db from "@/database/dexie/index.js";
+import { sites as defaultSites } from "@/database/dexie/config/initData";
 import fs from "fs";
 
 export default {

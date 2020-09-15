@@ -83,7 +83,7 @@
 <script>
 import { mapMutations } from "vuex";
 import api from "@/api/api.js";
-import { star, history } from "@/database/services/index.js";
+import { star, history } from "@/database/dexie/services/index.js";
 const { clipboard } = require("electron");
 export default {
 	name: "detail",

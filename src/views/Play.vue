@@ -324,7 +324,7 @@ import {
 	setting,
 	shortcut,
 	mini,
-} from "@/database/services/index.js";
+} from "@/database/dexie/services/index.js";
 import api from "@/api/api.js";
 import Player from "xgplayer";
 import Hls from "xgplayer-hls.js";

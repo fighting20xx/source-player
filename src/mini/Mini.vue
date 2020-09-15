@@ -145,7 +145,12 @@
 </template>
 <script>
 import api from "@/api/api.js";
-import { history, setting, shortcut, mini } from "@/database/services/index.js";
+import {
+	history,
+	setting,
+	shortcut,
+	mini,
+} from "@/database/dexie/services/index.js";
 import mt from "mousetrap";
 import "xgplayer";
 import Hls from "xgplayer-hls.js";

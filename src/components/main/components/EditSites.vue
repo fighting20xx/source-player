@@ -117,7 +117,7 @@
 </template>
 <script>
 import { mapMutations } from "vuex";
-import { sites } from "@/database/services/index.js";
+import { sites } from "@/database/dexie/services/index.js";
 import draggable from "vuedraggable";
 export default {
 	name: "editSites",

@@ -1,4 +1,4 @@
-import { sites } from '@/database/services/index.js';
+import { sites } from '@/database/dexie/services/index.js';
 import axios from 'axios';
 import parser from 'fast-xml-parser';
 

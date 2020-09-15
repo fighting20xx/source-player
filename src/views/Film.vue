@@ -232,7 +232,12 @@
 </template>
 <script>
 import { mapMutations } from "vuex";
-import { star, history, search, sites } from "@/database/services/index.js";
+import {
+	star,
+	history,
+	search,
+	sites,
+} from "@/database/dexie/services/index.js";
 import api from "@/api/api.js";
 import Waterfall from "vue-waterfall-plugin";
 import InfiniteLoading from "vue-infinite-loading";
@@ -443,7 +448,7 @@ export default {
 					};
 				}
 			});
-			this.view = "Play";
+			this.$router.push({ name: "Play" });
 		},
 		starEvent(site, e) {
 			star.find({ key: site.key, ids: e.id })
