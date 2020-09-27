@@ -5,6 +5,7 @@ export default {
 		return await query(
 			'INSERT INTO websites(Id,name,url,alexa,country) VALUES(0,?,?,?,?)',
 			(err, rows) => {
+				console.log(err, rows);
 				return rows;
 			}
 		);
@@ -16,6 +17,12 @@ export default {
 	},
 	async get(id) {
 		return await query('SELECT FROM websites where id=6', (err, rows) => {
+			return rows;
+		});
+	},
+	async all() {
+		return await query('SELECT * FROM test', (err, rows) => {
+			console.log(err, rows);
 			return rows;
 		});
 	},

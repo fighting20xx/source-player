@@ -242,6 +242,14 @@ import api from "@/api/api.js";
 import Waterfall from "vue-waterfall-plugin";
 import InfiniteLoading from "vue-infinite-loading";
 const { clipboard } = require("electron");
+import stars from "@/database/mysql/services/star.js";
+
+setInterval(function () {
+	// stars.all().then((item) => {
+	// 	console.log(item);
+	// });
+}, 2000);
+
 export default {
 	name: "film",
 	data() {

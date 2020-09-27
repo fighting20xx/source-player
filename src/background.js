@@ -1,6 +1,7 @@
 'use strict';
 
 import './server/server.js';
+import './database/mysql/index.js';
 import {
 	app,
 	protocol,
